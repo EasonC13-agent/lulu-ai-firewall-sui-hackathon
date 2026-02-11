@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuLu AI - AI-Powered Firewall Assistant</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3a;
+      --text: #e4e4ef;
+      --text-dim: #8888a0;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --code-bg: #0d0d14;
+      --max-w: 960px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent-light); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,15,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0.75rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    nav .logo { font-weight: 700; font-size: 1.1rem; }
+    nav .logo span { color: var(--accent-light); }
+    nav .links { display: flex; gap: 1.5rem; font-size: 0.9rem; }
+    nav .links a { color: var(--text-dim); }
+    nav .links a:hover { color: var(--text); text-decoration: none; }
+
+    /* Hero */
+    .hero { padding: 7rem 1.5rem 3rem; text-align: center; }
+    .hero h1 {
+      font-size: 2.8rem; font-weight: 800;
+      background: linear-gradient(135deg, #22c55e, #818cf8, #c084fc);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem;
+    }
+    .hero .subtitle { font-size: 1.25rem; color: var(--text); font-weight: 500; margin-bottom: 0.5rem; }
+    .hero p { color: var(--text-dim); font-size: 1.05rem; max-width: 620px; margin: 0 auto; }
+    .hero .badges { margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.85rem; border-radius: 999px;
+      font-size: 0.8rem; font-weight: 500;
+      border: 1px solid var(--border); background: var(--surface);
+    }
+    .badge.green { border-color: #16a34a40; color: var(--green); }
+    .badge.purple { border-color: #7c3aed40; color: var(--accent-light); }
+    .badge.yellow { border-color: #ca8a0440; color: var(--yellow); }
+
+    /* Content */
+    .content { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem 6rem; }
+
+    /* Section */
+    .section { margin-bottom: 3.5rem; }
+    .section h2 {
+      font-size: 1.6rem; font-weight: 700; margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+    }
+    .section h3 { font-size: 1.15rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--accent-light); }
+    .section p { margin-bottom: 0.75rem; color: var(--text-dim); }
+    .section ul, .section ol { margin: 0.5rem 0 1rem 1.5rem; color: var(--text-dim); }
+    .section li { margin-bottom: 0.3rem; }
+    .section strong { color: var(--text); }
+
+    /* Code */
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: var(--code-bg); padding: 0.15rem 0.4rem; border-radius: 4px;
+      font-size: 0.85em; color: var(--accent-light);
+    }
+    pre {
+      background: var(--code-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem 1.25rem;
+      overflow-x: auto; margin: 0.75rem 0 1.25rem;
+    }
+    pre code { background: none; padding: 0; font-size: 0.85rem; color: var(--text); }
+
+    /* Cards */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem;
+    }
+    .card h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+    .card p { font-size: 0.9rem; margin: 0; }
+    .card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+    /* Diagram */
+    .diagram {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem; margin: 1rem 0;
+      font-family: 'SF Mono', monospace; font-size: 0.8rem;
+      white-space: pre; overflow-x: auto; line-height: 1.5;
+      color: var(--text-dim);
+    }
+
+    /* Screenshot */
+    .screenshot {
+      margin: 1.25rem 0; border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .screenshot img { width: 100%; display: block; }
+    .screenshot .caption {
+      padding: 0.5rem 1rem; background: var(--surface);
+      font-size: 0.85rem; color: var(--text-dim);
+    }
+
+    /* Alert example */
+    .alert-example {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem; margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .alert-example .risk-high { color: var(--red); font-weight: 600; }
+    .alert-example .risk-low { color: var(--green); font-weight: 600; }
+    .alert-example .header { font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+    .alert-example .field { margin-bottom: 0.25rem; }
+    .alert-example .field span { color: var(--text-dim); }
+    .alert-example .analysis { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0 1.25rem; font-size: 0.9rem; }
+    th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--text); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: var(--text-dim); }
+    td code { font-size: 0.8rem; }
+
+    /* Alert box */
+    .alert {
+      border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.9rem;
+    }
+    .alert.info { background: #6366f115; border: 1px solid #6366f130; }
+    .alert.warn { background: #eab30815; border: 1px solid #eab30830; color: var(--yellow); }
+    .alert.success { background: #22c55e15; border: 1px solid #22c55e30; color: var(--green); }
+
+    /* TOC */
+    .toc {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 3rem;
+    }
+    .toc h3 { margin: 0 0 0.75rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+    .toc ol { margin: 0; padding-left: 1.25rem; }
+    .toc li { margin-bottom: 0.3rem; font-size: 0.9rem; }
+
+    /* Footer */
+    footer {
+      text-align: center; padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2rem; }
+      .hero .subtitle { font-size: 1.05rem; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <div class="logo">🛡️ <span>LuLu</span> AI</div>
+    <div class="links">
+      <a href="#problem">Problem</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#agent-skill">Agent Skill</a>
+      <a href="#mac-app">Mac App</a>
+      <a href="#sui">Sui Integration</a>
+      <a href="https://github.com/EasonC13-agent/lulu-ai-firewall-sui-hackathon" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🛡️ LuLu AI</h1>
+  <div class="subtitle">AI-Powered Firewall Assistant for macOS</div>
+  <p>Intercepts LuLu Firewall alerts, analyzes network connections with AI, and lets you manage rules from anywhere. No more guessing if a connection is safe.</p>
+  <div class="badges">
+    <span class="badge green">● Open Source</span>
+    <span class="badge purple">🤖 AI Agent Skill</span>
+    <span class="badge">🖥️ Native Mac App</span>
+    <span class="badge yellow">⚡ Sui Hackathon 2026</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#problem">The Problem</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#agent-skill">Agent Skill: lulu-monitor</a></li>
+      <li><a href="#mac-app">Mac App: LuLu AI Companion</a></li>
+      <li><a href="#sui">Sui Integration: 3mate Platform</a></li>
+      <li><a href="#repos">Repositories</a></li>
+    </ol>
+  </div>
+
+  <!-- Problem -->
+  <div class="section" id="problem">
+    <h2>The Problem</h2>
+    <p><a href="https://objective-see.org/products/lulu.html" target="_blank">LuLu</a> is the best open-source macOS firewall. But when it shows an alert like:</p>
+    <div class="alert-example">
+      <div class="header">⚠️ LuLu Alert</div>
+      <div class="field"><code>python3</code> (/usr/bin/python3) wants to connect to <code>185.199.108.133:443</code></div>
+    </div>
+    <p>Most users have no idea if this is safe or malicious. They either:</p>
+    <ul>
+      <li><strong>Allow everything</strong> (defeating the purpose of a firewall)</li>
+      <li><strong>Block everything</strong> (breaking legitimate apps)</li>
+    </ul>
+    <p><strong>LuLu AI solves this.</strong> It automatically analyzes every connection and tells you what's happening, who owns the destination, the risk level, and whether to allow or block.</p>
+  </div>
+
+  <!-- Architecture -->
+  <div class="section" id="architecture">
+    <h2>Architecture</h2>
+    <p>LuLu AI has <strong>two independent components</strong>. Each works on its own, no shared dependency:</p>
+
+    <div class="diagram">
+┌─────────────────────────────────────────────────────────┐
+│  User's Mac                                             │
+│                                                         │
+│  ┌────────────┐      ┌──────────────────┐               │
+│  │   LuLu     │─────▶│  lulu-monitor    │──▶ AI Agent   │
+│  │  Firewall  │      │  (Agent Skill)   │   (OpenClaw)  │
+│  └────────────┘      └──────────────────┘       │       │
+│       │                                         │       │
+│       │                                         ▼       │
+│       │                                    Telegram /   │
+│       │                                    Discord      │
+│       │                                    Notifications│
+│  ┌────────────────┐                                     │
+│  │  LuLu AI       │                                     │
+│  │  Companion     │──▶ Anthropic API                    │
+│  │  (Mac App)     │    (or 3mate Platform)              │
+│  └────────────────┘                                     │
+└─────────────────────────────────────────────────────────┘</div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="icon">🤖</div>
+        <h4>Agent Skill: lulu-monitor</h4>
+        <p>Background service. Detects LuLu alerts via AppleScript, sends to AI agent for analysis, delivers Telegram notifications with Allow/Block buttons.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🖥️</div>
+        <h4>Mac App: LuLu AI Companion</h4>
+        <p>Native menu bar app. Shows AI analysis overlay directly on your Mac. WHOIS + Geo enrichment. Setup wizard included.</p>
+      </div>
+    </div>
+
+    <div class="alert info">ℹ️ The two components are <strong>completely independent</strong>. The Agent Skill connects directly to LuLu Firewall and your AI agent. The Mac App connects to LuLu Firewall and an LLM API. Neither depends on the other.</div>
+  </div>
+
+  <!-- Agent Skill -->
+  <div class="section" id="agent-skill">
+    <h2>🤖 Agent Skill: lulu-monitor</h2>
+    <p>A background service that monitors LuLu Firewall alerts and delivers AI-analyzed notifications to Telegram with one-tap action buttons.</p>
+    <p><strong>Repo:</strong> <a href="https://github.com/EasonC13-agent/lulu-monitor" target="_blank">EasonC13-agent/lulu-monitor</a></p>
+
+    <h3>Flow</h3>
+    <pre><code>LuLu Alert → Detect (AppleScript) → AI Analyzes → Telegram Notification
+                                                            ↓
+                                                  User taps Allow/Block
+                                                            ↓
+                                                  Action executed on LuLu</code></pre>
+
+    <h3>Features</h3>
+    <ul>
+      <li>Real-time LuLu alert detection via AppleScript</li>
+      <li>AI analysis using Claude (via OpenClaw Gateway)</li>
+      <li>Telegram notifications with 4 action buttons (Allow/Block, permanent or one-time)</li>
+      <li>Auto-execute mode for high-confidence safe connections</li>
+      <li>Runs as launchd service (auto-start on boot)</li>
+    </ul>
+
+    <h3>Example: Suspicious Connection 🔴</h3>
+    <div class="alert-example">
+      <div class="header">🔥 LuLu Firewall Alert</div>
+      <div class="field"><span>Process:</span> python3 (/usr/bin/python3)</div>
+      <div class="field"><span>PID:</span> 51847</div>
+      <div class="field"><span>Connection:</span> 185.199.108.133:443 (TCP)</div>
+      <div class="field"><span>DNS:</span> raw.githubusercontent.com</div>
+      <div class="analysis">
+        <strong>Analysis:</strong> This Python subprocess is attempting to connect to GitHub to download additional scripts. This connection was NOT initiated by me and appears to be from a post-install hook in a skill package.<br><br>
+        <span class="risk-high">Risk: 🔴 High</span> - Unexpected outbound connection during skill installation<br>
+        <strong>Recommendation: 🚫 Block</strong> - Investigate the install scripts before allowing
+      </div>
+    </div>
+
+    <h3>Example: Safe Connection 🟢</h3>
+    <div class="alert-example">
+      <div class="header">🔥 LuLu Firewall Alert</div>
+      <div class="field"><span>Process:</span> python3.11 (/opt/homebrew/bin/python3.11)</div>
+      <div class="field"><span>PID:</span> 52103</div>
+      <div class="field"><span>Connection:</span> 148.251.183.254:443 (TCP)</div>
+      <div class="field"><span>DNS:</span> wttr.in</div>
+      <div class="analysis">
+        <strong>Analysis:</strong> Running the weather skill for the first time. The skill uses a Python script that connects to wttr.in (a weather service). This is expected behavior.<br><br>
+        <span class="risk-low">Risk: 🟢 Low</span> - First-time connection from weather skill<br>
+        <strong>Recommendation: ✅ Allow</strong>
+      </div>
+    </div>
+
+    <div class="screenshot">
+      <img src="../images/telegram-alerts.png" alt="Telegram alert notifications with Allow/Block buttons">
+      <div class="caption">Telegram notifications with one-tap Allow/Block buttons</div>
+    </div>
+  </div>
+
+  <!-- Mac App -->
+  <div class="section" id="mac-app">
+    <h2>🖥️ Mac App: LuLu AI Companion</h2>
+    <p>A native macOS menu bar app that provides AI-powered analysis directly on your Mac with an overlay recommendation window.</p>
+    <p><strong>Repo:</strong> <a href="https://github.com/EasonC13-agent/LuLuAICompanion" target="_blank">EasonC13-agent/LuLuAICompanion</a></p>
+
+    <h3>Features</h3>
+    <ul>
+      <li>Native SwiftUI menu bar app</li>
+      <li>Monitors LuLu alerts via macOS Accessibility API</li>
+      <li>WHOIS + Geo IP enrichment for every connection</li>
+      <li>AI recommendation overlay window next to LuLu alert</li>
+      <li>Setup wizard for easy first-time configuration</li>
+      <li>Uses <code>claude-haiku-4-5</code> for fast, cost-efficient responses</li>
+    </ul>
+
+    <h3>API Key Options</h3>
+    <p>The app supports two ways to connect to AI:</p>
+    <ul>
+      <li><strong>Anthropic API key</strong> (<code>sk-ant-...</code>) - Direct connection to Anthropic</li>
+      <li><strong>3mate Platform key</strong> (<code>sk-3mate-...</code>) - Pay-per-use via Sui Tunnel</li>
+    </ul>
+
+    <div class="screenshot">
+      <img src="../images/lulu-monitor-screenshot.png" alt="LuLu AI Companion screenshot">
+      <div class="caption">LuLu AI Companion analyzing a firewall alert</div>
+    </div>
+  </div>
+
+  <!-- Sui Integration -->
+  <div class="section" id="sui">
+    <h2>⚡ Sui Integration: 3mate Platform</h2>
+    <div class="alert warn">⚠️ The 3mate Platform is currently in progress. Smart contracts are deployed on Sui Testnet.</div>
+
+    <p>LuLu AI Companion can optionally use the <strong>3mate Platform</strong> for AI API access, powered by Sui Tunnel micropayments. This enables pay-per-use AI without requiring users to have their own Anthropic API key.</p>
+    <p><strong>Platform:</strong> <a href="https://platform.3mate.io" target="_blank">platform.3mate.io</a> | <strong>Repo:</strong> <a href="https://github.com/EasonC13-agent/platform.3mate.io" target="_blank">EasonC13-agent/platform.3mate.io</a></p>
+
+    <h3>How Payment Works</h3>
+    <ol>
+      <li><strong>Deposit:</strong> User opens a Sui Tunnel, deposits USDC on-chain</li>
+      <li><strong>Create Key:</strong> Generate API key, authorized on-chain via <code>add_authorized_key()</code></li>
+      <li><strong>Use:</strong> Each AI analysis deducts from tunnel balance (pay-per-use)</li>
+      <li><strong>Claim:</strong> Backend claims used funds with Ed25519 signature verification</li>
+      <li><strong>Close:</strong> User can close tunnel and get unused funds refunded anytime</li>
+    </ol>
+
+    <h3>Smart Contract</h3>
+    <p><strong>Sui Move</strong> Tunnel Payment Protocol on testnet:</p>
+    <table>
+      <thead><tr><th>Item</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Package</td><td><code>0x42a47edd...092678</code></td></tr>
+        <tr><td>Tests</td><td>42 tests, <strong>100% code coverage</strong></td></tr>
+        <tr><td>Features</td><td>Multi-key tunnels, grace period, cooperative close</td></tr>
+        <tr><td>Gas</td><td>Gas Station sponsored transactions</td></tr>
+      </tbody>
+    </table>
+
+    <h3>State Receipt Signing</h3>
+    <p>Each API call updates cumulative usage. The backend signs a state receipt with Ed25519:</p>
+    <pre><code>message = tunnel_id_bytes || bcs(cumulative_amount) || bcs(nonce)
+signature = ed25519_sign(message, api_key_private_key)</code></pre>
+    <p>The operator submits this signature on-chain to claim funds. The contract verifies against any authorized key in the Tunnel.</p>
+  </div>
+
+  <!-- Repos -->
+  <div class="section" id="repos">
+    <h2>Repositories</h2>
+    <table>
+      <thead><tr><th>Repo</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href="https://github.com/EasonC13-agent/lulu-ai-firewall-sui-hackathon" target="_blank">lulu-ai-firewall-sui-hackathon</a></td>
+          <td>This repo: documentation, slides, submission</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/EasonC13-agent/lulu-monitor" target="_blank">lulu-monitor</a></td>
+          <td>AI Agent Skill (background service)</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/EasonC13-agent/LuLuAICompanion" target="_blank">LuLuAICompanion</a></td>
+          <td>Mac App (menu bar companion)</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/EasonC13-agent/platform.3mate.io" target="_blank">platform.3mate.io</a></td>
+          <td>3mate Platform (backend + smart contracts)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Tech Stack</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>AI Agent Skill</td><td>Node.js, AppleScript, OpenClaw</td></tr>
+        <tr><td>Mac App</td><td>Swift, SwiftUI, XcodeGen</td></tr>
+        <tr><td>Web Platform</td><td>React, TypeScript, Vite, TailwindCSS</td></tr>
+        <tr><td>Backend</td><td>Bun, Hono, Prisma</td></tr>
+        <tr><td>Smart Contracts</td><td>Sui Move (42 tests, 100% coverage)</td></tr>
+        <tr><td>Wallet</td><td>@mysten/dapp-kit</td></tr>
+        <tr><td>Payments</td><td>Sui Tunnel, Gas Station, Ed25519</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  <p>LuLu AI &middot; Sui Hackathon 2026 &middot; <a href="https://github.com/EasonC13-agent/lulu-ai-firewall-sui-hackathon" target="_blank">GitHub</a> &middot; <a href="https://objective-see.org/products/lulu.html" target="_blank">LuLu Firewall</a></p>
+</footer>
+
+</body>
+</html>
