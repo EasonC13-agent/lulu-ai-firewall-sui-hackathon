@@ -202,40 +202,49 @@
 <!-- Slide 7: Component 2 - Mac App -->
 <section>
   <h2>🖥️ Component 2: Mac App</h2>
-  <p class="subtitle">LuLuAICompanion - Native macOS menu bar app</p>
+  <p class="subtitle">LuLuAICompanion - Standalone native macOS menu bar app</p>
   <br>
   <div class="two-col">
     <div class="card" style="font-size:0.7em;">
-      <h3>Features</h3>
+      <h3>🧠 AI Analysis</h3>
       <ul>
-        <li>Native SwiftUI menu bar app</li>
-        <li>Monitors alerts via Accessibility API</li>
-        <li>WHOIS + Geo + DNS enrichment</li>
-        <li><span class="highlight">AI-powered risk analysis</span> with detailed explanation</li>
-        <li>One-click Allow/Block with confidence score</li>
-        <li><span class="highlight">Multi-provider API keys</span>: Anthropic, OpenAI, Gemini, 3mate</li>
-        <li>Automatic failover across providers</li>
-        <li><span class="highlight">Decision history</span> with full audit log</li>
-        <li>Setup wizard for easy config</li>
+        <li>Full AI-powered risk analysis with detailed explanation</li>
+        <li>WHOIS + Geo + DNS enrichment per connection</li>
+        <li>Confidence score for every recommendation</li>
+        <li>On-screen overlay next to LuLu alert</li>
+        <li>One-click Allow/Block</li>
+      </ul>
+    </div>
+    <div class="card" style="font-size:0.7em;">
+      <h3>🔑 Multi-Provider API Keys</h3>
+      <ul>
+        <li>Supports <span class="highlight">Anthropic</span>, <span class="highlight">OpenAI</span>, <span class="highlight">Gemini</span>, and <span class="highlight">3mate</span></li>
+        <li>Add multiple keys with automatic failover</li>
+        <li>No OpenClaw needed, just your own API key</li>
+      </ul>
+    </div>
+  </div>
+  <div class="two-col" style="margin-top:8px;">
+    <div class="card" style="font-size:0.7em;">
+      <h3>📋 Decision History</h3>
+      <ul>
+        <li>Full audit log of every Allow/Block decision</li>
+        <li>Review past connections with timestamps</li>
+        <li>Click to view AI analysis for any past alert</li>
+      </ul>
+    </div>
+    <div class="card" style="font-size:0.7em;">
+      <h3>⚡ Easy Setup</h3>
+      <ul>
+        <li>Download & run, no dependencies</li>
+        <li>Setup wizard walks through config</li>
+        <li>Works standalone on any Mac with LuLu</li>
       </ul>
       <p>
         <span class="badge badge-blue">Swift</span>
         <span class="badge badge-blue">SwiftUI</span>
         <span class="badge badge-blue">XcodeGen</span>
       </p>
-    </div>
-    <div class="card" style="font-size:0.7em;">
-      <h3>vs. Agent Skill</h3>
-      <table style="font-size:0.9em; width:100%;">
-        <tr><td></td><td><strong>Mac App</strong></td><td><strong>Agent Skill</strong></td></tr>
-        <tr><td>Setup</td><td>Download & run</td><td>OpenClaw required</td></tr>
-        <tr><td>Notify</td><td>On-screen overlay</td><td>Telegram/Discord</td></tr>
-        <tr><td>AI Analysis</td><td>✅ Full analysis</td><td>✅ Full analysis</td></tr>
-        <tr><td>API Keys</td><td>✅ Multi-provider</td><td>Via OpenClaw</td></tr>
-        <tr><td>History</td><td>✅ Local audit log</td><td>✅ Chat history</td></tr>
-        <tr><td>Remote</td><td>❌ Local only</td><td>✅ From phone</td></tr>
-        <tr><td>Auto</td><td>❌</td><td>✅ Auto-execute</td></tr>
-      </table>
     </div>
   </div>
 </section>
